@@ -70,57 +70,47 @@ namespace LeetCode
 
         public bool Version2ForStach(string s)
         {
+            Dictionary<char, char> chars = new Dictionary<char, char>() ;
+            chars.Add('(', ')');
+            chars.Add('[', ']');
+            chars.Add('{', '}');
+            Stack<char> STchar = new Stack<char>();
             try
             {
-                Stack<char> signChar = new Stack<char>();
-
-                for (int i = 0; i < s.Length; i++)
+                foreach (var ch in s)
                 {
-                    if (s[i] == '(' || s[i] == '{' || s[i] == '[')
+                    if (chars.ContainsValue(ch))
                     {
-                        signChar.Push(s[i]);
-                    }
-                    else if (s[i] == ')')
-                    {
-                        var now = signChar.Pop();
-                        if (now == '(')
+                        var nowPop = STchar.Pop();
+                        if (nowPop == chars.Single(u => u.Value == ch).Key)
                         {
                             continue;
                         }
-                        return false;
-                    }
-                    else if (s[i] == ']')
-                    {
-                        var now = signChar.Pop();
-                        if (now == '[')
+                        else
                         {
-                            continue;
+                            throw new Exception();
                         }
-                        return false;
                     }
-                    else if (s[i] == '}')
+                    else if (chars.ContainsKey(ch))
                     {
-                        var now = signChar.Pop();
-                        if (now == '{')
-                        {
-                            continue;
-                        }
-                        return false;
+                        STchar.Push(ch);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception();
                     }
                 }
-
-                if (signChar.Count == 0)
-                {
-                    return true;
-                }
-                return false;
+                return true;
             }
             catch (Exception er)
             {
-                Console.WriteLine("no pop");
+                Console.WriteLine("Wrong run -> fail test");
+                Console.WriteLine(er.Message);
                 return false;
-                    
             }
+
+          
         }
   
     }
